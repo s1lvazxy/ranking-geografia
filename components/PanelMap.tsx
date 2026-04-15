@@ -5,34 +5,40 @@ import dynamic from "next/dynamic"
 const MapInner = dynamic(() => import("./MapInner"), {
   ssr: false,
   loading: () => (
-    <div style={{ width: "100%", height: "100%", background: "#111520", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <span style={{ color: "#334155", fontSize: 12 }}>A carregar mapa…</span>
+    <div style={{ width: "100%", height: "100%", background: "#0A0D14", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span style={{ color: "#334155", fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+        carregando mapa...
+      </span>
     </div>
   ),
 })
 
-const panelStyle: React.CSSProperties = {
-  background: "#111520",
-  border: "1px solid #1C2438",
-  borderRadius: 12,
-  padding: 20,
-  display: "flex",
-  flexDirection: "column",
-}
-
-const labelStyle: React.CSSProperties = {
-  fontSize: 11,
-  textTransform: "uppercase",
-  letterSpacing: "0.15em",
-  color: "#64748B",
-  marginBottom: 12,
-  display: "block",
-}
-
 export default function PanelMap() {
   return (
-    <div style={{ ...panelStyle, minHeight: 300 }}>
-      <span style={labelStyle}>Top 10 Cidades — Distribuição Mundial</span>
+    <div
+      style={{
+        background: "#111520",
+        border: "1px solid #1C2438",
+        borderRadius: 6,
+        padding: 24,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        boxSizing: "border-box",
+      }}
+    >
+      <span
+        style={{
+          fontSize: 10,
+          textTransform: "uppercase",
+          letterSpacing: "0.2em",
+          color: "#64748B",
+          marginBottom: 16,
+          display: "block",
+        }}
+      >
+        ── TOP 10 — DISTRIBUIÇÃO MUNDIAL ──
+      </span>
       <div style={{ flex: 1, minHeight: 220, position: "relative" }}>
         <MapInner />
       </div>

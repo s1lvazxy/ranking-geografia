@@ -7,32 +7,37 @@ import { top10Cities2024, top10Countries2024 } from "@/lib/data"
 const TABS = ["Top 10 Cidades", "Top 10 Países"] as const
 type Tab = (typeof TABS)[number]
 
-const panelStyle: React.CSSProperties = {
+const panel: React.CSSProperties = {
   background: "#111520",
   border: "1px solid #1C2438",
-  borderRadius: 12,
-  padding: 20,
+  borderRadius: 6,
+  padding: 24,
+  height: "100%",
+  boxSizing: "border-box",
 }
 
-const labelStyle: React.CSSProperties = {
-  fontSize: 11,
+const label: React.CSSProperties = {
+  fontSize: 10,
   textTransform: "uppercase",
-  letterSpacing: "0.15em",
+  letterSpacing: "0.2em",
   color: "#64748B",
-  marginBottom: 12,
+  marginBottom: 16,
   display: "block",
 }
 
-const thStyle: React.CSSProperties = {
+const th: React.CSSProperties = {
   textAlign: "left",
-  fontSize: 11,
+  fontSize: 10,
   textTransform: "uppercase",
-  letterSpacing: "0.1em",
-  color: "#64748B",
-  padding: "4px 8px",
-  fontWeight: 500,
+  letterSpacing: "0.12em",
+  color: "#334155",
+  padding: "4px 10px 10px",
+  fontWeight: 400,
   borderBottom: "1px solid #1C2438",
-  paddingBottom: 8,
+}
+
+function zeroPad(n: number) {
+  return String(n).padStart(2, "0")
 }
 
 export default function PanelRankings() {
@@ -40,25 +45,28 @@ export default function PanelRankings() {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null)
 
   return (
-    <div style={panelStyle}>
-      <span style={labelStyle}>Rankings ICCA 2024</span>
+    <div style={panel}>
+      <span style={label}>── RANKINGS ICCA 2024 ──</span>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
+      <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
-              padding: "5px 12px",
-              borderRadius: 6,
+              padding: "4px 10px",
+              borderRadius: 4,
               border: "1px solid",
               borderColor: activeTab === tab ? "#3B82F6" : "#1C2438",
-              background: activeTab === tab ? "rgba(59,130,246,0.1)" : "transparent",
-              color: activeTab === tab ? "#3B82F6" : "#64748B",
-              fontSize: 12,
+              background: activeTab === tab ? "rgba(59,130,246,0.08)" : "transparent",
+              color: activeTab === tab ? "#3B82F6" : "#334155",
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
               cursor: "pointer",
-              transition: "all 0.15s",
+              transition: "all 0.12s",
+              fontFamily: "inherit",
             }}
           >
             {tab}
@@ -66,33 +74,32 @@ export default function PanelRankings() {
         ))}
       </div>
 
-      {/* Table */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.15 }}
         >
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr>
                 {activeTab === "Top 10 Cidades" ? (
                   <>
-                    <th style={thStyle}>Pos.</th>
-                    <th style={thStyle}>Cidade</th>
-                    <th style={thStyle}>País</th>
-                    <th style={{ ...thStyle, textAlign: "right" }}>Reuniões</th>
-                    <th style={{ ...thStyle, textAlign: "right" }}>Pos. Europeia</th>
-                    <th style={thStyle}>Nota</th>
+                    <th style={{ ...th, width: 36 }}>#</th>
+                    <th style={th}>Cidade</th>
+                    <th style={th}>País</th>
+                    <th style={{ ...th, textAlign: "right" }}>Rns.</th>
+                    <th style={{ ...th, textAlign: "right" }}>EU</th>
+                    <th style={th}>Nota</th>
                   </>
                 ) : (
                   <>
-                    <th style={thStyle}>Pos.</th>
-                    <th style={thStyle}>País</th>
-                    <th style={{ ...thStyle, textAlign: "right" }}>Reuniões</th>
-                    <th style={thStyle}>Nota</th>
+                    <th style={{ ...th, width: 36 }}>#</th>
+                    <th style={th}>País</th>
+                    <th style={{ ...th, textAlign: "right" }}>Rns.</th>
+                    <th style={th}>Nota</th>
                   </>
                 )}
               </tr>
@@ -105,77 +112,75 @@ export default function PanelRankings() {
                     return (
                       <motion.tr
                         key={`${row.city}-${i}`}
-                        initial={{ opacity: 0, x: -8 }}
+                        initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05, duration: 0.25 }}
+                        transition={{ delay: i * 0.04, duration: 0.2 }}
                         onMouseEnter={() => setHoveredRow(i)}
                         onMouseLeave={() => setHoveredRow(null)}
                         style={{
                           background: isLisboa
-                            ? "rgba(16,185,129,0.05)"
+                            ? "rgba(16,185,129,0.04)"
                             : isHovered
-                            ? "#111520"
+                            ? "rgba(59,130,246,0.04)"
                             : "transparent",
-                          borderBottom: "1px solid",
-                          borderColor: isHovered ? "#3B82F6" : "#1C2438",
-                          transition: "all 0.15s",
+                          borderBottom: `1px solid ${isHovered ? "#3B82F6" : "#1C2438"}`,
+                          transition: "all 0.12s",
                           cursor: "default",
                         }}
                       >
-                        <td style={{ padding: "8px 8px", color: isLisboa ? "#10B981" : "#64748B", fontSize: 13, width: 40 }}>
-                          {row.rank}
+                        <td style={{ padding: "7px 10px", color: isLisboa ? "#10B981" : "#334155", fontSize: 11 }}>
+                          {zeroPad(row.rank)}
                         </td>
-                        <td style={{ padding: "8px 8px", color: isLisboa ? "#10B981" : "#F1F5F9", fontSize: 13, fontWeight: isLisboa ? 600 : 400 }}>
+                        <td style={{ padding: "7px 10px", color: isLisboa ? "#10B981" : "#F1F5F9", fontSize: 12, fontWeight: isLisboa ? 600 : 400, textShadow: isLisboa ? "0 0 8px rgba(16,185,129,0.35)" : "none" }}>
                           {row.city}
                         </td>
-                        <td style={{ padding: "8px 8px", color: "#64748B", fontSize: 13 }}>
+                        <td style={{ padding: "7px 10px", color: "#64748B", fontSize: 11 }}>
                           {row.country}
                         </td>
-                        <td style={{ padding: "8px 8px", color: isLisboa ? "#10B981" : "#F1F5F9", fontSize: 13, textAlign: "right" }}>
+                        <td style={{ padding: "7px 10px", color: isLisboa ? "#10B981" : "#F1F5F9", fontSize: 12, textAlign: "right" }}>
                           {row.meetings}
                         </td>
-                        <td style={{ padding: "8px 8px", color: "#64748B", fontSize: 13, textAlign: "right" }}>
-                          {row.europeRank ?? "—"}
+                        <td style={{ padding: "7px 10px", color: "#64748B", fontSize: 11, textAlign: "right" }}>
+                          {row.europeRank != null ? zeroPad(row.europeRank) : "——"}
                         </td>
-                        <td style={{ padding: "8px 8px", color: "#64748B", fontSize: 11, maxWidth: 180 }}>
+                        <td style={{ padding: "7px 10px", color: "#334155", fontSize: 10 }}>
                           {row.note ?? ""}
                         </td>
                       </motion.tr>
                     )
                   })
                 : top10Countries2024.map((row, i) => {
-                    const isPortugal = row.highlight
+                    const isPT = row.highlight
                     const isHovered = hoveredRow === i
                     return (
                       <motion.tr
                         key={`${row.country}-${i}`}
-                        initial={{ opacity: 0, x: -8 }}
+                        initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05, duration: 0.25 }}
+                        transition={{ delay: i * 0.04, duration: 0.2 }}
                         onMouseEnter={() => setHoveredRow(i)}
                         onMouseLeave={() => setHoveredRow(null)}
                         style={{
-                          background: isPortugal
-                            ? "rgba(16,185,129,0.05)"
+                          background: isPT
+                            ? "rgba(16,185,129,0.04)"
                             : isHovered
-                            ? "#111520"
+                            ? "rgba(59,130,246,0.04)"
                             : "transparent",
-                          borderBottom: "1px solid",
-                          borderColor: isHovered ? "#3B82F6" : "#1C2438",
-                          transition: "all 0.15s",
+                          borderBottom: `1px solid ${isHovered ? "#3B82F6" : "#1C2438"}`,
+                          transition: "all 0.12s",
                           cursor: "default",
                         }}
                       >
-                        <td style={{ padding: "8px 8px", color: isPortugal ? "#10B981" : "#64748B", fontSize: 13, width: 40 }}>
-                          {row.rank}
+                        <td style={{ padding: "7px 10px", color: isPT ? "#10B981" : "#334155", fontSize: 11 }}>
+                          {zeroPad(row.rank)}
                         </td>
-                        <td style={{ padding: "8px 8px", color: isPortugal ? "#10B981" : "#F1F5F9", fontSize: 13, fontWeight: isPortugal ? 600 : 400 }}>
+                        <td style={{ padding: "7px 10px", color: isPT ? "#10B981" : "#F1F5F9", fontSize: 12, fontWeight: isPT ? 600 : 400, textShadow: isPT ? "0 0 8px rgba(16,185,129,0.35)" : "none" }}>
                           {row.country}
                         </td>
-                        <td style={{ padding: "8px 8px", color: isPortugal ? "#10B981" : "#F1F5F9", fontSize: 13, textAlign: "right" }}>
-                          {row.meetings ?? "—"}
+                        <td style={{ padding: "7px 10px", color: isPT ? "#10B981" : "#F1F5F9", fontSize: 12, textAlign: "right" }}>
+                          {row.meetings ?? "——"}
                         </td>
-                        <td style={{ padding: "8px 8px", color: "#64748B", fontSize: 11 }}>
+                        <td style={{ padding: "7px 10px", color: "#334155", fontSize: 10 }}>
                           {row.note ?? ""}
                         </td>
                       </motion.tr>

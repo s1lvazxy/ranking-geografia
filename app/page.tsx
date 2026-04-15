@@ -10,69 +10,52 @@ import PanelSources from "@/components/PanelSources"
 const grid: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(12, 1fr)",
-  gap: 16,
+  gap: 20,
+  alignItems: "stretch",
 }
-
-const colSpan = (n: number): React.CSSProperties => ({
-  gridColumn: `span ${n}`,
-})
-
-const colSpanResponsive = (n: number): React.CSSProperties => ({
-  gridColumn: `span ${n}`,
-})
 
 export default function Home() {
   return (
-    <main style={{ maxWidth: 1600, margin: "0 auto", padding: 24 }}>
-      {/* ── Grid principal ── */}
-      <section id="rankings" style={{ ...grid, marginBottom: 16 }}>
-        {/* Painel A — Rankings */}
-        <div style={colSpanResponsive(7)} className="col-span-12 lg:col-span-7">
+    <main style={{ maxWidth: 1600, margin: "0 auto", padding: 32 }}>
+
+      {/* ── Row 1: Rankings + Map ── */}
+      <section id="rankings" style={{ ...grid, marginBottom: 20 }}>
+        <div style={{ gridColumn: "span 7", height: "100%" }} className="col-span-12 lg:col-span-7">
           <PanelRankings />
         </div>
-
-        {/* Painel B — Map */}
-        <div style={colSpanResponsive(5)} className="col-span-12 lg:col-span-5">
+        <div style={{ gridColumn: "span 5", height: "100%" }} className="col-span-12 lg:col-span-5">
           <PanelMap />
         </div>
       </section>
 
-      <section id="evolution" style={{ ...grid, marginBottom: 16 }}>
-        {/* Painel C — Evolution */}
-        <div style={colSpanResponsive(7)} className="col-span-12 lg:col-span-7">
+      {/* ── Row 2: Evolution + Portugal + Radar ── */}
+      <section id="evolution" style={{ ...grid, marginBottom: 20 }}>
+        <div style={{ gridColumn: "span 7", height: "100%" }} className="col-span-12 lg:col-span-7">
           <PanelEvolution />
         </div>
-
-        {/* Painel D — Portugal */}
-        <div id="portugal" style={colSpanResponsive(3)} className="col-span-12 lg:col-span-3">
+        <div id="portugal" style={{ gridColumn: "span 3", height: "100%" }} className="col-span-12 lg:col-span-3">
           <PanelPortugal />
         </div>
-
-        {/* Painel E — Radar */}
-        <div style={colSpanResponsive(2)} className="col-span-12 lg:col-span-2">
+        <div style={{ gridColumn: "span 2", height: "100%" }} className="col-span-12 lg:col-span-2">
           <PanelRadar />
         </div>
       </section>
 
-      {/* ── Grid secundária ── */}
-      <div style={{ ...grid, marginBottom: 16 }}>
-        {/* Painel F — Context */}
-        <section id="context" style={colSpanResponsive(6)} className="col-span-12 lg:col-span-6">
+      {/* ── Row 3: Context + Critical ── */}
+      <div style={{ ...grid, marginBottom: 20 }}>
+        <section id="context" style={{ gridColumn: "span 6", height: "100%" }} className="col-span-12 lg:col-span-6">
           <PanelContext />
         </section>
-
-        {/* Painel G — Critical */}
-        <section id="critical" style={colSpanResponsive(6)} className="col-span-12 lg:col-span-6">
+        <section id="critical" style={{ gridColumn: "span 6", height: "100%" }} className="col-span-12 lg:col-span-6">
           <PanelCritical />
         </section>
       </div>
 
-      {/* Painel H — Sources */}
-      <section id="sources" style={{ ...grid }}>
-        <div style={{ gridColumn: "span 12" }}>
-          <PanelSources />
-        </div>
+      {/* ── Row 4: Sources ── */}
+      <section id="sources">
+        <PanelSources />
       </section>
+
     </main>
   )
 }

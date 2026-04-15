@@ -27,7 +27,12 @@ export default function RootLayout({
       lang="pt"
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="bg-[#0A0D14] min-h-screen">{children}</body>
+      <body
+        className="bg-[#0A0D14] min-h-screen"
+        style={{ fontFamily: "var(--font-geist-mono)", fontVariantNumeric: "tabular-nums" }}
+      >
+        {children}
+      </body>
     </html>
   );
 }

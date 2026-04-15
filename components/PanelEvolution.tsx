@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -39,11 +39,7 @@ function buildChartData(cities: string[]) {
   })
 }
 
-type TooltipPayloadItem = {
-  name: string
-  value: number
-  color: string
-}
+type TooltipPayloadItem = { name: string; value: number; color: string }
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipPayloadItem[]; label?: number }) {
   if (!active || !payload?.length) return null
@@ -51,42 +47,25 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
     <div style={{
       background: "#0A0D14",
       border: "1px solid #1C2438",
-      borderRadius: 8,
+      borderRadius: 4,
       padding: "10px 14px",
-      fontSize: 12,
+      fontSize: 11,
     }}>
-      <div style={{ color: "#64748B", marginBottom: 6, fontWeight: 600 }}>{label}</div>
+      <div style={{ color: "#64748B", marginBottom: 6, letterSpacing: "0.1em" }}>{label}</div>
       {payload.map((p) => {
         const entry = historicalData.find((d) => d.year === Number(label) && d.city === p.name)
         return (
-          <div key={p.name} style={{ color: p.color, marginBottom: 2 }}>
+          <div key={p.name} style={{ color: p.color, marginBottom: 3 }}>
             <span style={{ fontWeight: 600 }}>{p.name}</span>
-            {" — "}
-            {p.value} reuniões
+            {" — "}{p.value} rns.
             {entry?.worldRank != null && (
-              <span style={{ color: "#64748B" }}> · #{entry.worldRank} mundial</span>
+              <span style={{ color: "#334155" }}> · #{String(entry.worldRank).padStart(2, "0")} mundial</span>
             )}
           </div>
         )
       })}
     </div>
   )
-}
-
-const panelStyle: React.CSSProperties = {
-  background: "#111520",
-  border: "1px solid #1C2438",
-  borderRadius: 12,
-  padding: 20,
-}
-
-const labelStyle: React.CSSProperties = {
-  fontSize: 11,
-  textTransform: "uppercase",
-  letterSpacing: "0.15em",
-  color: "#64748B",
-  marginBottom: 12,
-  display: "block",
 }
 
 export default function PanelEvolution() {
@@ -106,8 +85,8 @@ export default function PanelEvolution() {
         onEnter: () => {
           gsap.fromTo(
             containerRef.current,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
           )
           animated.current = true
         },
@@ -132,38 +111,63 @@ export default function PanelEvolution() {
   }
 
   return (
-    <div style={panelStyle} ref={containerRef}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-        <span style={labelStyle}>Evolução Histórica 2016–2024</span>
-        {/* City filter select */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-          {ALL_CITIES.map((city) => (
-            <button
-              key={city}
-              onClick={() => toggleSelect(city)}
-              style={{
-                padding: "3px 8px",
-                borderRadius: 4,
-                border: "1px solid",
-                borderColor: selectedCities.includes(city) ? CITY_COLORS[city] : "#1C2438",
-                background: selectedCities.includes(city) ? `${CITY_COLORS[city]}18` : "transparent",
-                color: selectedCities.includes(city) ? CITY_COLORS[city] : "#334155",
-                fontSize: 10,
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-            >
-              {city}
-            </button>
-          ))}
-        </div>
+    <div
+      ref={containerRef}
+      style={{
+        background: "#111520",
+        border: "1px solid #1C2438",
+        borderRadius: 6,
+        padding: 24,
+        height: "100%",
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Header */}
+      <span style={{
+        fontSize: 10,
+        textTransform: "uppercase",
+        letterSpacing: "0.2em",
+        color: "#64748B",
+        marginBottom: 12,
+        display: "block",
+      }}>
+        ── EVOLUÇÃO HISTÓRICA 2016–2024 ──
+      </span>
+
+      {/* City filter buttons — own row below title */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 14 }}>
+        {ALL_CITIES.map((city) => (
+          <button
+            key={city}
+            onClick={() => toggleSelect(city)}
+            style={{
+              padding: "3px 8px",
+              borderRadius: 3,
+              border: "1px solid",
+              borderColor: selectedCities.includes(city) ? CITY_COLORS[city] : "#1C2438",
+              background: selectedCities.includes(city) ? `${CITY_COLORS[city]}14` : "transparent",
+              color: selectedCities.includes(city) ? CITY_COLORS[city] : "#334155",
+              fontSize: 10,
+              letterSpacing: "0.08em",
+              cursor: "pointer",
+              transition: "all 0.12s",
+              fontFamily: "inherit",
+              textTransform: "uppercase",
+            }}
+          >
+            {city}
+          </button>
+        ))}
       </div>
 
-      <ResponsiveContainer width="100%" height={260}>
-        <LineChart data={chartData} margin={{ top: 4, right: 8, bottom: 4, left: -16 }}>
-          <CartesianGrid stroke="#1C2438" strokeDasharray="3 3" />
-          <XAxis dataKey="year" stroke="#334155" tick={{ fill: "#64748B", fontSize: 11 }} />
-          <YAxis stroke="#334155" tick={{ fill: "#64748B", fontSize: 11 }} domain={["auto", "auto"]} />
+      {/* Chart */}
+      <ResponsiveContainer width="100%" height={240}>
+        <LineChart data={chartData} margin={{ top: 4, right: 8, bottom: 4, left: -18 }}>
+          <CartesianGrid stroke="#1C2438" strokeDasharray="2 4" />
+          <XAxis dataKey="year" stroke="#1C2438" tick={{ fill: "#334155", fontSize: 10 }} />
+          <YAxis stroke="#1C2438" tick={{ fill: "#334155", fontSize: 10 }} domain={["auto", "auto"]} />
           <Tooltip content={<CustomTooltip />} />
           {selectedCities.map((city) => (
             <Line
@@ -171,9 +175,9 @@ export default function PanelEvolution() {
               type="monotone"
               dataKey={city}
               stroke={CITY_COLORS[city]}
-              strokeWidth={city === "Lisboa" || city === "Viena" ? 3 : 1.5}
-              dot={{ r: 3, fill: CITY_COLORS[city] }}
-              activeDot={{ r: 5 }}
+              strokeWidth={city === "Lisboa" || city === "Viena" ? 2.5 : 1.5}
+              dot={{ r: 2.5, fill: CITY_COLORS[city], strokeWidth: 0 }}
+              activeDot={{ r: 4 }}
               hide={hiddenLines.has(city)}
               connectNulls={false}
             />
@@ -182,7 +186,7 @@ export default function PanelEvolution() {
       </ResponsiveContainer>
 
       {/* Clickable legend */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 10 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
         {selectedCities.map((city) => (
           <button
             key={city}
@@ -190,24 +194,24 @@ export default function PanelEvolution() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 4,
-              padding: "2px 6px",
-              borderRadius: 4,
+              gap: 5,
+              padding: "2px 0",
               border: "none",
               background: "transparent",
               cursor: "pointer",
-              opacity: hiddenLines.has(city) ? 0.35 : 1,
-              transition: "opacity 0.15s",
+              opacity: hiddenLines.has(city) ? 0.3 : 1,
+              transition: "opacity 0.12s",
+              fontFamily: "inherit",
             }}
           >
-            <span style={{ width: 10, height: 3, background: CITY_COLORS[city], display: "block", borderRadius: 2 }} />
-            <span style={{ color: "#64748B", fontSize: 11 }}>{city}</span>
+            <span style={{ width: 12, height: 2, background: CITY_COLORS[city], display: "block" }} />
+            <span style={{ color: "#64748B", fontSize: 10, letterSpacing: "0.06em" }}>{city}</span>
           </button>
         ))}
       </div>
 
-      <div style={{ marginTop: 10, color: "#334155", fontSize: 11 }}>
-        ⚠️ 2020–2021: dados incluem contabilização híbrida
+      <div style={{ marginTop: 10, color: "#334155", fontSize: 10, letterSpacing: "0.05em" }}>
+        ⚠ 2020–2021: dados incluem contabilização híbrida
       </div>
     </div>
   )
