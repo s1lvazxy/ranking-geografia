@@ -45,8 +45,8 @@ export default function MapInner() {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <ComposableMap
-        projection="geoRobinson"
-        projectionConfig={{ scale: 130 }}
+        projection="geoEqualEarth"
+        projectionConfig={{ scale: 147 }}
         style={{ width: "100%", height: "100%", background: "#111520" }}
       >
         <Geographies geography={GEO_URL}>
